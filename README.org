@@ -2,6 +2,7 @@ Article: On the estimation of average treatment effects with
 right-censored time to event outcome and competing risks
 
 Authors: Julien Péron, Maryam Idlhaj, Delphine Maucort-Boulch, Joris Giai, Pascal Roy, Laurence Collette, Marc Buyse, Brice Ozenne
+
 Author responsible for writing the code: Brice Ozenne and Julien Péron.
 
 E-mail of the author maintaining the code: brice.mh.ozenne@gmail.com
@@ -21,13 +22,17 @@ manuscript is organized as follow:
   =Results= directory. It also produces the figures and exports them
   in the =figures= directory.
 
-- *the REVIEW file* contains additional analyses used to adress the
-  comments of the reviewers. Results were exported in the directory
-  =results-review= and figures in the directory =figures-review=.
+- *the ANALYSIS files* contains the code used to perform the analyses
+  of the two illustrative datasets.
 
 - *the SOFTWARE DIRECTORY* contains the BuyseTest package used for the
   simulations and data analysis, as well as additional information
   about the execution of the BATCH files.
+
+- *the REVIEW file* contains additional analyses used to adress the
+  comments of the reviewers. Results were exported in the directory
+  =results-review= and figures in the directory =figures-review=.
+
 
 * R and package versions
 

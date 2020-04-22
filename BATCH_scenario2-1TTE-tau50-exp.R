@@ -59,7 +59,6 @@ formula.BT <- group ~ tte(time, status = status, threshold = 50)
 formula.GS <- group ~ cont(timetoevent, threshold = 50)
 
 ## * generative distribution
-
 simData <- function(n.C, n.T, hazard.C, hazard.T, hazard.censoring){
 
     group <- c(rep("T", n.T), rep("C", n.C)) # on attribut un groupe a chacun des patients
@@ -75,7 +74,7 @@ simData <- function(n.C, n.T, hazard.C, hazard.T, hazard.censoring){
 ## * run simulation
 res <- NULL ## start with an empty dataset
 
-for (iGrid in 1:n.grid){   ## iGrid <- 1
+for (iGrid in 1:n.grid){   ## iGrid <- 36
 
     iN <- grid[iGrid,"n"]
     iHazard.T <- grid[iGrid,"hazard.T"]
