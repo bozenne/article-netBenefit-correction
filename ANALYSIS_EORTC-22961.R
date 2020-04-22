@@ -19,9 +19,9 @@ df.eortc$dsurvyears <- df.eortc$dsur/365
 df.eortc$DC <- ifelse(df.eortc$ss=="Dead",1,0)
 
 ## * analysis
-BuyseTest.options(n.resampling = 1e4, ## should 1e4
+BuyseTest.options(n.resampling = 1e2, ## should 1e4
                   method.inference = "permutation",
-                  cpus = 3,
+                  cpus = 1,
                   trace = 1)
 
 ff <- trt2~tte(dsurvyears, status=DC, threshold=2)
@@ -101,19 +101,25 @@ summary(BuyseGehan)
 
 ## Peron's scoring rule
 summary(BuysePeron)
- ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta p.value   
- ## dsurvyears         2      100        16.85          25.91      54.83      2.4 -0.0906 -0.0906   0.006 **
+ ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta    p.value    
+ ## dsurvyears         2      100        16.85          25.91       4.83     52.4 -0.0906 -0.0906 < 2.22e-16 ***
 
 ## corrected Peron's scoring rule
 summary(BuysePeron_corr)
- ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta p.value   
- ## dsurvyears         2      100        17.27          26.55      56.18        0 -0.0928 -0.0928  0.0065 **
+ ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta    p.value    
+ ## dsurvyears         2      100        35.41          54.44      10.15        0 -0.1903 -0.1903 < 2.22e-16 ***
 
 ## * old (not used)
 if(FALSE){ 
     packageurl <- "https://cran.r-project.org/src/contrib/Archive/BuyseTest/BuyseTest_1.7.tar.gz"
     install.packages(packageurl, repos=NULL, type="source")
+    ## devtools::install_github("bozenne/BuyseTest", ref = "1bf7a7e5143560fbbc208611ed52525930e3f5bb") ## same as now ((1.6.1) update vignette with formula Peron inequalities)
 
+    devtools::install_github("bozenne/BuyseTest", ref = "6e6c7b0f3fb69e4409ab6fd91554b5da666904e2") ## different as now ( (1.6.2) update tests )
+
+    ## devtools::install_github("bozenne/BuyseTest", ref = "575565fe6f4ed6c82c50bb6eea8f7a4cf03878e2") ## different as now ( (1.6.1) add R_CheckUserInterrupt() when looping over the pairs  )
+
+    
     ff <- trt2~tte(dsurvyears, censoring=DC, threshold=2)
 
     BuyseGehan <- BuyseTest(ff, data=df.eortc,
@@ -121,11 +127,18 @@ if(FALSE){
                             seed = 10,
                             correction.uninf = FALSE)
 
-    BuysePeron <- BuyseTest(ff, data=df.eortc,
+    BuysePeron <- BuyseTest(trt2~tte(dsurvyears, censoring=DC, threshold=2),
+                            data=df.eortc,
                             method.tte ="Peron",
                             seed = 10,
-                            n.resampling = 100,
-                            correction.uninf = FALSE)
+                            method.inference = "none")
+    summary(BuysePeron)
+
+    BuysePeron <- BuyseTest(trt2~tte(dsurvyears, status=DC, threshold=1),
+                            data=df.eortc,
+                            scoring.rule="Peron",
+                            seed = 10,
+                            method.inference = "none")
     summary(BuysePeron)
 
     BuysePeron_corr <- BuyseTest(ff, data=df.eortc,

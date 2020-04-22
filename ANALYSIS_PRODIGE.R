@@ -20,9 +20,9 @@ df.prodige$bras <- ifelse(df.prodige$bras==2,0,1)
 df.prodige$OS <- as.numeric(difftime(df.prodige$d_dn2,df.prodige$randodt2,units="days")/30.44)
 
 ## * analysis
-BuyseTest.options(n.resampling = 1e4, 
+BuyseTest.options(n.resampling = 1e2, 
                   method.inference = "permutation",
-                  cpus = 3,
+                  cpus = 1,
                   trace = 1)
 
 ff <- bras~tte(OS, status=etat, threshold=6)

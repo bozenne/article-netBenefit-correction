@@ -3,7 +3,7 @@ right-censored time to event outcome and competing risks
 
 Authors: Julien Péron, Maryam Idlhaj, Delphine Maucort-Boulch, Joris Giai, Pascal Roy, Laurence Collette, Marc Buyse, Brice Ozenne
 
-Author responsible for writing the code: Brice Ozenne and Julien Péron.
+Authors responsible for writing the code: Brice Ozenne and Julien Péron.
 
 E-mail of the author maintaining the code: brice.mh.ozenne@gmail.com
 
@@ -25,7 +25,7 @@ manuscript is organized as follow:
 - *the ANALYSIS files* contains the code used to perform the analyses
   of the two illustrative datasets.
 
-- *the SOFTWARE DIRECTORY* contains the BuyseTest package used for the
+- *the software directory* contains the BuyseTest package used for the
   simulations and data analysis, as well as additional information
   about the execution of the BATCH files.
 
