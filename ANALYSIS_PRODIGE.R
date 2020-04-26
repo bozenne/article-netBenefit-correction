@@ -11,18 +11,12 @@ library(prodlim)
 
 ## * data management
 ## ** load
-df.prodige = read.csv(file.path(path.data,"data_PRODIGE.csv"),sep=";" ,header = TRUE)
-
-## ** process
-df.prodige$d_dn2 <- as.Date(df.prodige$d_dn, "%d/%m/%Y")
-df.prodige$randodt2 <- as.Date(df.prodige$randodt, "%d/%m/%Y")
-df.prodige$bras <- ifelse(df.prodige$bras==2,0,1)
-df.prodige$OS <- as.numeric(difftime(df.prodige$d_dn2,df.prodige$randodt2,units="days")/30.44)
+df.prodige <- read.csv(file.path(path.data,"data_PRODIGE.csv"))
 
 ## * analysis
-BuyseTest.options(n.resampling = 1e2, 
-                  method.inference = "permutation",
-                  cpus = 1,
+BuyseTest.options(n.resampling = 1e4, 
+                  method.inference = "bootstrap",
+                  cpus = 3,
                   trace = 1)
 
 ff <- bras~tte(OS, status=etat, threshold=6)
@@ -32,10 +26,10 @@ BuyseGehan <- BuyseTest(ff, data = df.prodige,
                         seed = 10,
                         correction.uninf = FALSE)
 
-## BuyseGehan_corr <- BuyseTest(ff, data = df.prodige,
-##                              scoring.rule ="Gehan",
-##                              seed = 10,
-##                              correction.uninf = TRUE)
+BuyseGehan_corr <- BuyseTest(ff, data = df.prodige,
+                             scoring.rule ="Gehan",
+                             seed = 10,
+                             correction.uninf = TRUE)
 
 BuysePeron <- BuyseTest(ff, data = df.prodige,
                         scoring.rule ="Peron",
@@ -85,17 +79,35 @@ plot(prodlim(Hist(OS, etat)~bras, data = df.prodige))
 
 ## Gehan's scoring rule
 summary(BuyseGehan)
- ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta    p.value    
- ##       OS         6      100        28.19          10.66      33.01    28.15 0.1753 0.1753 < 2.22e-16 ***
+ ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%]    p.value    
+ ##       OS         6      100        28.19          10.66      33.01    28.15 0.1753 0.1753   [0.0991;0.2519] < 2.22e-16 ***
+
+## corrected Gehan's scoring rule
+summary(BuyseGehan_corr)
+## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%) delta Delta CI [2.5% ; 97.5%]    p.value    
+##        OS         6      100        39.23          14.83      45.94        0 0.244 0.244   [0.1388;0.3456] < 2.22e-16 ***
 
 ## Peron's scoring rule
 summary(BuysePeron)
- ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta    p.value    
- ##       OS         6      100         40.2          14.64      45.06      0.1 0.2556 0.2556 < 2.22e-16 ***
+ ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%]    p.value    
+ ##       OS         6      100         40.2          14.64      45.06      0.1 0.2556 0.2556    [0.156;0.3548] < 2.22e-16 ***
 
 ## corrected Peron's scoring rule
 summary(BuysePeron_corr)
- ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta    p.value    
- ##       OS         6      100        40.24          14.65       45.1        0 0.2559 0.2559 < 2.22e-16 ***
+ ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%]    p.value    
+ ##       OS         6      100        40.24          14.65       45.1        0 0.2559 0.2559   [0.1542;0.3557] < 2.22e-16 ***
 
 
+## * data management (original dataset)
+if(FALSE){
+    df.prodige = read.csv(file.path("source","data_PRODIGE.csv"),sep=";" ,header = TRUE)
+
+    ## ** process
+    df.prodige$d_dn2 <- as.Date(df.prodige$d_dn, "%d/%m/%Y")
+    df.prodige$randodt2 <- as.Date(df.prodige$randodt, "%d/%m/%Y")
+    df.prodige$bras <- ifelse(df.prodige$bras==2,0,1)
+    df.prodige$OS <- as.numeric(difftime(df.prodige$d_dn2,df.prodige$randodt2,units="days")/30.44)
+
+    ## ** export
+    write.csv(df.prodige[,c("OS","etat","bras")],file.path(path.data,"data_PRODIGE.csv"))
+}

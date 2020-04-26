@@ -16,8 +16,8 @@ R CMD BATCH BATCH_scenario3-1TTE-earlyEffect.R output/scenario3-1TTE-earlyEffect
 ## clean results      ## rm -r ./Results/scenario3-1TTE-earlyEffect/*
 ## submission command ## qsub SUBM_scenario3-1TTE-earlyEffect.sh
 
-## submission output  ## Your job-array 13259.1-20:1 ("scenario3-1TTE-earlyEffect") has been submitted
-## submission time    ## 04/20/20 3:03 
+## submission output  ## Your job-array 13376.1-20:1 ("scenario3-1TTE-earlyEffect") has been submitted
+## submission time    ## 04/23/20 5:36 
 
 ## documentation      ## https://ifsv.sund.ku.dk/biostat/biostatwiki/index.php/IT:Cluster : biostat wiki about the cluster
                       ## http://gridscheduler.sourceforge.net/htmlman/manuals.html : grid engine manual 

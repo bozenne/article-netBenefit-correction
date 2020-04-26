@@ -16,8 +16,8 @@ R CMD BATCH BATCH_scenario4-1TTE-delayEffect.R output/scenario4-1TTE-delayEffect
 ## clean results      ## rm -r ./Results/scenario4-1TTE-delayEffect/*
 ## submission command ## qsub SUBM_scenario4-1TTE-delayEffect.sh
 
-## submission output  ## Your job-array 13260.1-20:1 ("scenario4-1TTE-delayEffect") has been submitted
-## submission time    ## 04/20/20 3:04 
+## submission output  ## Your job-array 13377.1-20:1 ("scenario4-1TTE-delayEffect") has been submitted
+## submission time    ## 04/23/20 5:36 
 
 ## documentation      ## https://ifsv.sund.ku.dk/biostat/biostatwiki/index.php/IT:Cluster : biostat wiki about the cluster
                       ## http://gridscheduler.sourceforge.net/htmlman/manuals.html : grid engine manual 

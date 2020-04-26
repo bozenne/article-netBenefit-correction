@@ -16,8 +16,8 @@ R CMD BATCH BATCH_scenario2-1TTE-tau50-exp.R output/scenario2-1TTE-tau50-exp/$JO
 ## clean results      ## rm -r ./Results/scenario2-1TTE-tau50-exp/*
 ## submission command ## qsub SUBM_scenario2-1TTE-tau50-exp.sh
 
-## submission output  ## Your job-array 13258.1-20:1 ("scenario2-1TTE-tau50-exp") has been submitted
-## submission time    ## 04/20/20 3:02 
+## submission output  ## Your job-array 13312.1-20:1 ("scenario2-1TTE-tau50-exp") has been submitted
+## submission time    ## 04/22/20 5:51 
 
 ## documentation      ## https://ifsv.sund.ku.dk/biostat/biostatwiki/index.php/IT:Cluster : biostat wiki about the cluster
                       ## http://gridscheduler.sourceforge.net/htmlman/manuals.html : grid engine manual 

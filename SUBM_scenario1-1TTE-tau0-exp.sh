@@ -11,13 +11,13 @@
 
 R CMD BATCH BATCH_scenario1-1TTE-tau0-exp.R output/scenario1-1TTE-tau0-exp/$JOB_NAME-I-$SGE_TASK_ID.Rout --no-restore --no-save
 
-## go to directory    ## cd p:/Cluster/GPC/Article-correction-Julien/
+## go to directory    ## cd Cluster/GPC/Article-correction-Julien/
 ## clean outputs      ## rm -r ./output/scenario1-1TTE-tau0-exp/*
 ## clean results      ## rm -r ./Results/scenario1-1TTE-tau0-exp/*
 ## submission command ## qsub SUBM_scenario1-1TTE-tau0-exp.sh
 
-## submission output  ## Your job-array 13257.1-20:1 ("scenario1-1TTE-tau0-exp") has been submitted
-## submission time    ## 04/20/20 3:01 
+## submission output  ## Your job-array 13375.1-20:1 ("scenario1-1TTE-tau0-exp") has been submitted
+## submission time    ## 04/23/20 5:35 
 
 ## documentation      ## https://ifsv.sund.ku.dk/biostat/biostatwiki/index.php/IT:Cluster : biostat wiki about the cluster
                       ## http://gridscheduler.sourceforge.net/htmlman/manuals.html : grid engine manual 

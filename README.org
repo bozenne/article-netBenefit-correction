@@ -62,7 +62,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] survival_2.44-1.1 BuyseTest_2.0.0   Rcpp_1.0.4       
+[1] survival_2.44-1.1 BuyseTest_2.1.0   Rcpp_1.0.4       
 
 loaded via a namespace (and not attached):
  [1] compiler_3.6.1     Matrix_1.2-17      parallel_3.6.1     prodlim_2019.11.13

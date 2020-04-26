@@ -16,8 +16,8 @@ R CMD BATCH BATCH_scenario5-TTE-bin.R output/scenario5-TTE-bin/$JOB_NAME-I-$SGE_
 ## clean results      ## rm -r ./Results/scenario5-TTE-bin/*
 ## submission command ## qsub SUBM_scenario5-TTE-bin.sh
 
-## submission output  ## Your job-array 13261.1-20:1 ("scenario5-TTE-bin") has been submitted
-## submission time    ## 04/20/20 3:04 
+## submission output  ## Your job-array 13313.1-20:1 ("scenario5-TTE-bin") has been submitted
+## submission time    ## 04/22/20 5:52 
 
 ## documentation      ## https://ifsv.sund.ku.dk/biostat/biostatwiki/index.php/IT:Cluster : biostat wiki about the cluster
                       ## http://gridscheduler.sourceforge.net/htmlman/manuals.html : grid engine manual 

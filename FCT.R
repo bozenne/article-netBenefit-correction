@@ -3,9 +3,9 @@
 ## Author: Brice Ozenne
 ## Created: apr 20 2020 (11:10) 
 ## Version: 
-## Last-Updated: apr 21 2020 (10:14) 
+## Last-Updated: apr 25 2020 (19:34) 
 ##           By: Brice Ozenne
-##     Update #: 21
+##     Update #: 31
 ##----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -36,6 +36,9 @@ loadRes <- function(path, tempo.file = FALSE,
 
     ls.out <- do.call(myApply, args = list(X = 1:n.file, FUN = function(iFile){
         iRead <- readRDS(file = file.path(path,file.read[iFile]))
+        ## if("grip" %in% names(iRead)){
+            ## names(iRead)[names(iRead)=="grip"] <- "grid"
+        ## }
         iOut <- cbind(data.table::as.data.table(iRead),
                       file = file.read[iFile])
         if(!is.null(export.attribute)){
@@ -43,7 +46,6 @@ loadRes <- function(path, tempo.file = FALSE,
         }
         return(iOut)
     }))
-    
     out <- do.call(rbind, ls.out)
     if(!is.null(export.attribute)){
         attr(out,export.attribute) <- attr(ls.out[[1]],export.attribute)
@@ -57,6 +59,9 @@ GGarticle <- function(object, formula.grid = ~n.char){
     Delta <- ggdata[n==max(n) & scoring.rule=="GS",mean(estimate.mean)]
     ggdata[, n.char := paste0("sample size: ",n," per group")]
     ggdata[, n.char := factor(n.char, levels = paste0("sample size: ",unique(sort(n))," per group"))]
+    if("shape" %in% names(ggdata)){
+        ggdata[, shape := paste0("shape parameter: ",shape)]
+    }
 
     gg <- ggplot(ggdata[scoring.rule != "GS"],
                  aes(x = pc.censoring,
@@ -67,7 +72,7 @@ GGarticle <- function(object, formula.grid = ~n.char){
                      color = scoring.rule))
     ## gg <- gg + geom_abline(intercept = Delta, slope = 0, col = "red")
     gg <- gg + geom_point() + geom_line()
-    gg <- gg + facet_wrap(formula.grid) + geom_line()
+    gg <- gg + facet_grid(formula.grid) + geom_line()
     gg <- gg + scale_color_manual(name = "",
                                   values = c("Gehan" = "gray",
                                              "Gehan.C" = "black",

@@ -44,6 +44,9 @@ confint2 <- function(object){
 
 ## * settings
 simulation <- 250 # nombre de simulations par condition
+BuyseTest.options(method.inference = "none"
+                  n.resampling = 1e3,
+                  trace = 0)
 
 grid <- expand.grid(n = c(200), ## sample size (each group)
                     hazard.T = c(0.005,0.01), ## hazard for the event in the treatment group
@@ -98,28 +101,28 @@ for (iGrid in 1:n.grid){   ## iGrid <- 1
                              shape = iShape)
 
             ## ** run BuyseTest
-            BuyseGS <- BuyseTest(formula.GS, data=iData, method.inference = "u-statistic",
-                                 seed = NULL, trace = 0)
+            BuyseGS <- BuyseTest(formula.GS, data=iData,
+                                 seed = NULL)
             
-            BuyseGehan <- BuyseTest(formula.BT, data=iData, method.inference = "u-statistic",
+            BuyseGehan <- BuyseTest(formula.BT, data=iData,
                                     scoring.rule ="Gehan",
                                     correction.uninf = 0,
-                                    seed = NULL, trace = 0)
+                                    seed = NULL)
             
-            BuyseGehan_Corr <- suppressWarnings(BuyseTest(formula.BT, data=iData, method.inference = method.inference.correction,
-                                                          scoring.rule ="Gehan",
-                                                          correction.uninf = 1,
-                                                          seed = NULL, trace = 0))
+            BuyseGehan_Corr <- BuyseTest(formula.BT, data=iData,
+                                         scoring.rule ="Gehan",
+                                         correction.uninf = 1,
+                                         seed = NULL)
 
-            BuysePeron <- BuyseTest(formula.BT, data=iData, method.inference = "u-statistic",
+            BuysePeron <- BuyseTest(formula.BT, data=iData, 
                                     scoring.rule ="Peron",
                                     correction.uninf = 0,
-                                    seed = NULL, trace = 0)
+                                    seed = NULL)
                             
-            BuysePeron_Corr <- suppressWarnings(BuyseTest(formula.BT, data=iData, method.inference = method.inference.correction,
-                                                          scoring.rule ="Peron",
-                                                          correction.uninf = 1,
-                                                          seed = NULL, trace = 0))
+            BuysePeron_Corr <- BuyseTest(formula.BT, data=iData, 
+                                         scoring.rule ="Peron",
+                                         correction.uninf = 1,
+                                         seed = NULL)
 
             ## ** store results
             iRes <- rbind(cbind(scoring.rule = "GS", confint2(BuyseGS)),

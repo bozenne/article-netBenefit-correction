@@ -10,18 +10,13 @@ library(survival)
 library(prodlim)
 
 ## * data management
-## ** load
-df.eortc = read.csv(file.path(path.data,"data_EORTC-22961.csv"),sep=";" ,header = TRUE)
-
-## ** process
-df.eortc$dsurvmonths <- df.eortc$dsur/30.4
-df.eortc$dsurvyears <- df.eortc$dsur/365
-df.eortc$DC <- ifelse(df.eortc$ss=="Dead",1,0)
+df.eortc <- read.csv(file.path(path.data,"data_EORTC-22961.csv"))
+df.eortc$trt2 <- relevel(df.eortc$trt2, "Short ADT")
 
 ## * analysis
-BuyseTest.options(n.resampling = 1e2, ## should 1e4
-                  method.inference = "permutation",
-                  cpus = 1,
+BuyseTest.options(n.resampling = 1e4,
+                  method.inference = "bootstrap",
+                  cpus = 3,
                   trace = 1)
 
 ff <- trt2~tte(dsurvyears, status=DC, threshold=2)
@@ -31,10 +26,10 @@ BuyseGehan <- BuyseTest(ff, data = df.eortc,
                         seed = 10,
                         correction.uninf = FALSE)
 
-## BuyseGehan_corr <- BuyseTest(ff, data = df.eortc,
-##                              scoring.rule ="Gehan",
-##                              seed = 10,
-##                              correction.uninf = TRUE)
+BuyseGehan_corr <- BuyseTest(ff, data = df.eortc,
+                             scoring.rule ="Gehan",
+                             seed = 10,
+                             correction.uninf = TRUE)
 
 BuysePeron <- BuyseTest(ff, data = df.eortc,
                         scoring.rule ="Peron",
@@ -61,6 +56,11 @@ median(df.eortc$dsurvyears)
 tapply(df.eortc$dsurvyears,df.eortc$trt2,median)
 ## Short ADT  Long ADT 
 ##  5.936986  6.021918 
+
+survfit(Surv(dsurvyears, DC) ~ trt2, data = df.eortc) 
+##                  n events median 0.95LCL 0.95UCL
+## trt2=Long ADT  487     98     NA      NA      NA
+## trt2=Short ADT 483    132   8.98    8.33      NA
 
 ## ** death
 tapply(df.eortc$DC==1,df.eortc$trt2,sum)
@@ -96,18 +96,23 @@ plot(prodlim(Hist(dsurvyears, DC)~trt2, data = df.eortc))
 
 ## Gehan's scoring rule
 summary(BuyseGehan)
- ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta p.value  
- ## dsurvyears         2      100         9.51          12.77       2.89    74.84 -0.0326 -0.0326   0.086 .
+ ## endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%] p.value  
+ ## dsurvyears         2      100        12.77           9.51       2.89    74.83 0.0326 0.0326  [-0.0038;0.0699]  0.0828 .
+
+## corrected Gehan's scoring rule
+summary(BuyseGehan_corr)
+ ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%] p.value  
+ ## dsurvyears         2      100        50.74          37.79      11.47        0 0.1295 0.1295  [-0.0177;0.2807]  0.0856 .
 
 ## Peron's scoring rule
 summary(BuysePeron)
- ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta    p.value    
- ## dsurvyears         2      100        16.85          25.91       4.83     52.4 -0.0906 -0.0906 < 2.22e-16 ***
+ ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%] p.value   
+ ## dsurvyears         2      100        25.91          16.85       4.83     52.4 0.0906 0.0906   [0.0277;0.1548]   0.004 **
 
 ## corrected Peron's scoring rule
 summary(BuysePeron_corr)
- ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)   delta   Delta    p.value    
- ## dsurvyears         2      100        35.41          54.44      10.15        0 -0.1903 -0.1903 < 2.22e-16 ***
+ ##   endpoint threshold total(%) favorable(%) unfavorable(%) neutral(%) uninf(%)  delta  Delta CI [2.5% ; 97.5%] p.value   
+ ## dsurvyears         2      100        54.44          35.41      10.15        0 0.1903 0.1903    [0.0592;0.318]  0.0042 **
 
 ## * old (not used)
 if(FALSE){ 
@@ -149,3 +154,19 @@ if(FALSE){
 
     summary(BuysePeron_corr)
 }
+
+
+## * data management (original dataset)
+if(FALSE){
+    ## ** load
+    df.eortc = read.csv(file.path("source","data_EORTC-22961.csv"),sep=";" ,header = TRUE)
+
+    ## ** process
+    df.eortc$dsurvmonths <- df.eortc$dsur/30.4
+    df.eortc$dsurvyears <- df.eortc$dsur/365
+    df.eortc$DC <- ifelse(df.eortc$ss=="Dead",1,0)
+
+    ## ** export
+    write.csv(df.eortc[,c("trt2","dsurvyears","DC")],file.path(path.data,"data_EORTC-22961.csv"))
+}
+
