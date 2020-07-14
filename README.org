@@ -29,6 +29,9 @@ manuscript is organized as follow:
   simulations and data analysis, as well as additional information
   about the execution of the BATCH files.
 
+- *the SM file* contains additional analyses shown in the
+  supplementary materials.
+
 - *the REVIEW file* contains additional analyses used to adress the
   comments of the reviewers. Results were exported in the directory
   =results-review= and figures in the directory =figures-review=.
