@@ -11,10 +11,11 @@ library(prodlim)
 
 ## * data management
 df.eortc <- read.csv(file.path(path.data,"data_EORTC-22961.csv"))
+df.eortc[df.eortc==0,"dsurvyears"] <- 1e-5
 df.eortc$trt2 <- relevel(df.eortc$trt2, "Short ADT")
 
 ## * analysis
-BuyseTest.options(n.resampling = 1e4,
+BuyseTest.options(n.resampling = 1e2,##1e4,
                   method.inference = "bootstrap",
                   cpus = 3,
                   trace = 1)
