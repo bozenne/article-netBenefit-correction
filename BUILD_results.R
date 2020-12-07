@@ -124,6 +124,7 @@ saveRDS(dtS.scenario4, file = "Results/dtS-scenario4.rds")
 dt.scenario5 <- loadRes(path.scenario5, export.attribute = "grid", tempo.file = TRUE)
 dt.scenario5 <- data.table(attr(dt.scenario5,"grid")[dt.scenario5$grid,],dt.scenario5)
 
+
 ## ** summarize
 dt.scenario5[, Delta := mean(.SD[n == max(n) & scoring.rule == "GS",estimate]), by = "index.endpoint"]
 dtS.scenario5 <- dt.scenario5[,.(rep= .N,

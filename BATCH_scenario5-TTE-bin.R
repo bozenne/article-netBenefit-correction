@@ -44,8 +44,8 @@ confint2 <- function(object){
 
 ## * Settings
 simulation <- 250 ## number of simulations per CPU
-BuyseTest.options(method.inference = "bootstrap",
-                  n.resampling = 1e3,
+BuyseTest.options(method.inference = "none",
+                  n.resampling = 1e1,
                   trace = 0)
 
 grid <- expand.grid(n = c(25,50,100,200), ## sample size (each group)
@@ -58,8 +58,8 @@ grid <- expand.grid(n = c(25,50,100,200), ## sample size (each group)
 n.grid <- NROW(grid)
 method.inference.correction <- "u-statistic"
 
-formula.BT <- group ~ tte(time, status = status, threshold = 50) + bin(toxicity)
-formula.GS <- group ~ cont(timetoevent, threshold = 50) + bin(toxicity)
+formula.BT <- group ~ tte(time, status = status, threshold = 50) + bin(toxicity, operator = "<0")
+formula.GS <- group ~ cont(timetoevent, threshold = 50) + bin(toxicity, operator = "<0")
 
 ## * generative distribution
 
