@@ -44,7 +44,7 @@ confint2 <- function(object){
 
 ## * settings
 simulation <- 250 # nombre de simulations par condition
-BuyseTest.options(method.inference = "none"
+BuyseTest.options(method.inference = "bootstrap",
                   n.resampling = 1e3,
                   trace = 0)
 
@@ -57,7 +57,6 @@ grid <- expand.grid(n = c(200), ## sample size (each group)
 n.grid <- NROW(grid)
 grid$HR <- grid$hazard.T / grid$hazard.C
 grid$Delta <- (1-grid$HR) / (1+grid$HR)
-method.inference.correction <- "u-statistic"
 
 formula.BT <- group ~ tte(time, status = status, threshold = 50)
 formula.GS <- group ~ cont(timetoevent, threshold = 50)
@@ -125,11 +124,11 @@ for (iGrid in 1:n.grid){   ## iGrid <- 1
                                          seed = NULL)
 
             ## ** store results
-            iRes <- rbind(cbind(scoring.rule = "GS", confint2(BuyseGS)),
-                          cbind(scoring.rule = "Gehan", confint2(BuyseGehan)),
-                          cbind(scoring.rule = "Gehan.C", suppressWarnings(confint2(BuyseGehan_Corr))),
-                          cbind(scoring.rule = "Peron", confint2(BuysePeron)),
-                          cbind(scoring.rule = "Peron.C", suppressWarnings(confint2(BuysePeron_Corr)))
+            iRes <- rbind(cbind(scoring.rule = "GS", suppressMessages(confint2(BuyseGS))),
+                          cbind(scoring.rule = "Gehan", suppressMessages(confint2(BuyseGehan))),
+                          cbind(scoring.rule = "Gehan.C", suppressMessages(confint2(BuyseGehan_Corr))),
+                          cbind(scoring.rule = "Peron", suppressMessages(confint2(BuysePeron))),
+                          cbind(scoring.rule = "Peron.C", suppressMessages(confint2(BuysePeron_Corr)))
                           )
 
             res <- rbind(res,

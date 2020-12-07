@@ -1,3 +1,4 @@
+## * Analytical estimation of the net benefit
 calcNB <- function(lambdaC,
                    lambda1, lambda2, lambda3, lambda4, lambda5,
                    t1, t2, t3, t4){
@@ -26,7 +27,7 @@ calcNB <- function(lambdaC,
 HR <- 0.3
 lambdaC <- 0.01
 
-## ** early
+## ** scenario 3: early effect
 lambda1E <- lambdaC * HR
 lambda2E <- lambdaC * (0.25 + 0.75 * HR)
 lambda3E <- lambdaC * (0.5 + 0.5 * HR)
@@ -43,6 +44,8 @@ NBE <- calcNB(lambdaC = lambdaC,
               t2 = 60,
               t3 = 80,
               t4 = 100)
+
+NBE
 ##         40         60         80        100      infty      total netBenefit 
 ## 0.01777268 0.01853809 0.02407939 0.02812682 0.25742445 0.34594144 0.30811713 
 
@@ -87,7 +90,7 @@ NBE <- calcNB(lambdaC = lambdaC,
 
 
 
-## ** delayed
+## ** scenario 4: late effect
 lambda1D <- lambdaC * 1
 lambda2D <- lambdaC * (0.75 + 0.25 * HR)
 lambda3D <- lambdaC * (0.5 + 0.5 * HR)
@@ -104,8 +107,7 @@ NBD <- calcNB(lambdaC = lambdaC,
               t2 = 60,
               t3 = 80,
               t4 = 100)
+NBD
 ##         40         60         80        100      infty      total netBenefit 
 ## 0.05434444 0.04621729 0.04634688 0.04260991 0.23944854 0.42896705 0.14206590 
 
-######################################################################
-### code-analytic.R ends here

@@ -43,8 +43,8 @@ confint2 <- function(object){
 }
 
 ## * settings
-simulation <- 250 # nombre de simulations par condition
-BuyseTest.options(method.inference = "none",
+simulation <- 250 ## number of simulations per CPU
+BuyseTest.options(method.inference = "bootstrap",
                   n.resampling = 1e3,
                   trace = 0)
 
@@ -106,7 +106,7 @@ for (iGrid in 1:n.grid){   ## iGrid <- 36
                                     correction.uninf = 0,
                                     seed = NULL)
             
-            BuyseGehan_Corr <- BuyseTest(formula.BT, data=iData
+            BuyseGehan_Corr <- BuyseTest(formula.BT, data=iData,
                                          scoring.rule ="Gehan",
                                          correction.uninf = 1,
                                          seed = NULL)
@@ -122,11 +122,12 @@ for (iGrid in 1:n.grid){   ## iGrid <- 36
                                          seed = NULL)
 
             ## ** store results
-            iRes <- rbind(cbind(scoring.rule = "GS", confint2(BuyseGS)),
-                          cbind(scoring.rule = "Gehan", confint2(BuyseGehan)),
-                          cbind(scoring.rule = "Gehan.C", suppressWarnings(confint2(BuyseGehan_Corr))),
-                          cbind(scoring.rule = "Peron", confint2(BuysePeron)),
-                          cbind(scoring.rule = "Peron.C", suppressWarnings(confint2(BuysePeron_Corr)))
+            ## suppress message "Estimated p-value of 0 - consider increasing the number of boostrap samples"
+            iRes <- rbind(cbind(scoring.rule = "GS", suppressMessages(confint2(BuyseGS))),
+                          cbind(scoring.rule = "Gehan", suppressMessages(confint2(BuyseGehan))),
+                          cbind(scoring.rule = "Gehan.C", suppressMessages(confint2(BuyseGehan_Corr))),
+                          cbind(scoring.rule = "Peron", suppressMessages(confint2(BuysePeron))),
+                          cbind(scoring.rule = "Peron.C", suppressMessages(confint2(BuysePeron_Corr)))
                           )
 
             res <- rbind(res,

@@ -4,6 +4,7 @@ library(data.table)
 library(BuyseTest)
 library(ggplot2)
 library(pbapply)
+library(parallel)
 
 ## * Simulation function
 m <- lvm()
@@ -18,18 +19,24 @@ distribution(m,~cens2) <- coxWeibull.lvm(scale=0.25)
 eventTime(m) <- time1 ~ min(t1=1,cens1=0)
 eventTime(m) <- time2 ~ min(t2=1,cens2=0)
 
-warper <- function(i, n, rho, model.tte = NULL){
-
+warper <- function(i, n, rho, m, model.tte = NULL){
+    require(BuyseTest)
+    require(lava)
+    
     d <- data.table::as.data.table(lava::sim(m, n = n, p = c(rho = rho)))
     d[,Id := 1:.N]
     d[,status1 := as.numeric(t1 <= cens1)]
     d[,status2 := as.numeric(t2 <= cens2)]
 
-    ffFull <- Treatment ~ cont(t1, threshold = 0.5) + cont(t2, threshold = 0.5)
+    ## d$t1
+    tau1 <- 0.5
+    tau2 <- 0.5
+    
+    ffFull <- eval(parse(text = paste0("Treatment ~ cont(t1, threshold = ",tau1,") + cont(t2, threshold = ",tau2,")")))
     eFull.BT <- BuyseTest(ffFull,
                           data = d, method.inference = "none", trace = 0)
 
-    ffCens <- Treatment ~ tte(time1, threshold = 0.5, status = status1) + tte(time2, threshold = 0.5, status = status2)
+    ffCens <- eval(parse(text = paste0("Treatment ~ tte(time1, threshold = ",tau1,", status = status1) + tte(time2, threshold = ",tau2,", status = status2)")))
     eCens.BT <- BuyseTest(ffCens, model.tte = model.tte,
                           data = d, method.inference = "none", trace = 0)
     eCensCorr.BT <- BuyseTest(ffCens, model.tte = model.tte,
@@ -42,10 +49,11 @@ warper <- function(i, n, rho, model.tte = NULL){
     allPairs$tte2.x <- d[allPairs$index.x,t2]
     allPairs$tte2.y <- d[allPairs$index.y,t2]
 
-    A <- (allPairs$tte2.x >= allPairs$tte2.y + 0.5) - (allPairs$tte2.y >= allPairs$tte2.x + 0.5)
-    B <- abs(allPairs$tte1.x - allPairs$tte1.y) < 0.5
+    A <- (allPairs$tte2.x >= allPairs$tte2.y + tau2) - (allPairs$tte2.y >= allPairs$tte2.x + tau2)
+    B <- abs(allPairs$tte1.x - allPairs$tte1.y) < tau1
 
     return(list(covTime = cor(d$t1,d$t2),
+                corPair = cor(A,B),
                 covPair = cov(A,B),
                 full = eFull.BT,
                 censored = eCens.BT,
@@ -54,14 +62,15 @@ warper <- function(i, n, rho, model.tte = NULL){
                 rho = rho))
 }
 ## * Run simulation
-n.sim <- 1000
+n.sim <- 100
+cl <- makeCluster(3)
 
 set.seed(10)
-ls.res <- c(pblapply(1:n.sim, warper, n = 500, rho=0),
-            pblapply(1:n.sim, warper, n = 500, rho=1),
-            pblapply(1:n.sim, warper, n = 500, rho=2),
-            pblapply(1:n.sim, warper, n = 500, rho=4),
-            pblapply(1:n.sim, warper, n = 500, rho=6))
+ls.res <- c(pblapply(1:n.sim, warper, n = 500, m = m, rho=0, cl = cl),
+            pblapply(1:n.sim, warper, n = 500, m = m, rho=1, cl = cl),
+            pblapply(1:n.sim, warper, n = 500, m = m, rho=2, cl = cl),
+            pblapply(1:n.sim, warper, n = 500, m = m, rho=4, cl = cl),
+            pblapply(1:n.sim, warper, n = 500, m = m, rho=6, cl = cl))
 
 ## * Process results
 #+BEGIN_SRC R :exports both :results output :session *R* :cache no
@@ -117,8 +126,11 @@ dt.gg[, variable := factor(variable,
                            levels = c("favorable","unfavorable","delta","covPair"),
                            labels = c(bquote(P[X >= Y+tau]),bquote(P[Y <= X+tau]),bquote(P[X >= Y+tau]-P[Y <= X+tau]),bquote(Cov(.,.))))]
 gg <- ggplot(dt.gg, aes(x = rho, y = value, color = estimator))
+gg <- gg + geom_hline(yintercept = 0)
 gg <- gg + geom_boxplot()
-gg <- gg + facet_grid(endpoint ~ variable)
+gg <- gg + facet_grid(endpoint ~ variable, scales = "free_y")
 gg <- gg + theme(legend.position="bottom")
-gg <- gg + xlab("correlation coefficient (average empirical correlation between time 1 and time 2)")
+gg <- gg + xlab("correlation coefficient (average empirical correlation between time 1 and time 2)") + ylab("estimate")
 gg
+
+## ggsave(gg, filename = file.path("figures-review","fig-SM-A.png"))
