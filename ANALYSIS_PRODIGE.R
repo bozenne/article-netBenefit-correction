@@ -59,51 +59,57 @@ BuyseTest.options(n.resampling = 1e4, ## number of bootstrap samples
 ## - right hand side: outcome (name, censoring status, threshold of clinical relevance)
 ff <- bras~tte(OS, status=etat, threshold=6)
 
-## Gehan scoring rule without correction
-BuyseGehan <- BuyseTest(ff,
-                        data = df.prodige, 
-                        scoring.rule ="Gehan",
-                        seed = 10,
-                        correction.uninf = FALSE)
-
-## Gehan scoring rule with correction at the pair level
-BuyseGehan_corr <- BuyseTest(ff, data = df.prodige,
-                             scoring.rule ="Gehan",
-                             seed = 10,
-                             correction.uninf = TRUE)
-
-## Peron scoring rule without correction
-BuysePeron <- BuyseTest(ff, data = df.prodige,
-                        scoring.rule = "Peron",
-                        seed = 10,
-                        correction.uninf = FALSE)
-
-## Peron scoring rule with correction at the pair level
-BuysePeron_corr <- BuyseTest(ff, data = df.prodige,
-                             scoring.rule ="Peron",
-                             seed = 10,
-                             correction.uninf = TRUE)
-
 if(save){
+    ## Gehan scoring rule without correction
+    BuyseGehan <- BuyseTest(ff,
+                            data = df.prodige, 
+                            scoring.rule ="Gehan",
+                            seed = 10,
+                            correction.uninf = FALSE)
+
+    ## Gehan scoring rule with correction at the pair level
+    BuyseGehan_corr <- BuyseTest(ff, data = df.prodige,
+                                 scoring.rule ="Gehan",
+                                 seed = 10,
+                                 correction.uninf = TRUE)
+
+    ## Peron scoring rule without correction
+    BuysePeron <- BuyseTest(ff, data = df.prodige,
+                            scoring.rule = "Peron",
+                            seed = 10,
+                            correction.uninf = FALSE)
+
+    ## Peron scoring rule with correction at the pair level
+    BuysePeron_corr <- BuyseTest(ff, data = df.prodige,
+                                 scoring.rule ="Peron",
+                                 seed = 10,
+                                 correction.uninf = TRUE)
+
     saveRDS(list(BuyseGehan = BuyseGehan,
                  BuyseGehan_corr = BuyseGehan_corr ,
                  BuysePeron = BuysePeron,
                  BuysePeron_corr = BuysePeron_corr),
             file = "Results/BT-PRODIGE.rds")
+}else{
+    BT.PRODIGE <- readRDS("Results/BT-PRODIGE.rds")
+    BuyseGehan <- BT.PRODIGE$BuyseGehan
+    BuyseGehan_corr <- BT.PRODIGE$BuyseGehan_corr
+    BuysePeron <- BT.PRODIGE$BuysePeron
+    BuysePeron_corr <- BT.PRODIGE$BuysePeron_corr
 }
 ## ** Results
-## note: warnings are expected when calling summary
+## note: messages are expected when calling summary
 ## the p-value is very small and would require a lot of samples to be precisely estimated
-M <- rbind(c("scoring.rule" = "Gehan", correction = FALSE, suppressWarnings(summary(BuyseGehan, print = FALSE)$table.print[,3:10])),
-           c("scoring.rule" = "Gehan", correction = TRUE, suppressWarnings(summary(BuyseGehan_corr, print = FALSE)$table.print[,3:10])),
-           c("scoring.rule" = "Peron", correction = FALSE, suppressWarnings(summary(BuysePeron, print = FALSE)$table.print[,3:10])),
-           c("scoring.rule" = "Peron", correction = FALSE, suppressWarnings(summary(BuysePeron_corr, print = FALSE)$table.print[,3:10])))
+M <- rbind(c("scoring.rule" = "Gehan", correction = FALSE, suppressMessages(summary(BuyseGehan, print = FALSE)$table.print[,3:10])),
+           c("scoring.rule" = "Gehan", correction = TRUE, suppressMessages(summary(BuyseGehan_corr, print = FALSE)$table.print[,3:10])),
+           c("scoring.rule" = "Peron", correction = FALSE, suppressMessages(summary(BuysePeron, print = FALSE)$table.print[,3:10])),
+           c("scoring.rule" = "Peron", correction = FALSE, suppressMessages(summary(BuysePeron_corr, print = FALSE)$table.print[,3:10])))
 print(M, quote = FALSE)
 ##      scoring.rule correction total(%) favorable(%) unfavorable(%) neutral(%) uninf(%) Delta  CI [2.5% ; 97.5%] p.value     
-## [1,] "Gehan"      FALSE      100      28.19        10.66          33.01      28.15    0.1753 "[0.1003;0.2511]" "< 2.22e-16"
-## [2,] "Gehan"      TRUE       100      39.23        14.83          45.94      0        0.244  "[0.1397;0.3454]" "< 2.22e-16"
-## [3,] "Peron"      FALSE      100      40.2         14.64          45.06      0.1      0.2556 "[0.1552;0.3541]" "< 2.22e-16"
-## [4,] "Peron"      FALSE      100      40.24        14.65          45.1       0        0.2559 "[0.1554;0.3546]" "< 2.22e-16"
+## [1,] "Gehan"      FALSE      100      28.19        10.66          33.01      28.15    0.1753 "[0.0987;0.2516]" "1e-04"     
+## [2,] "Gehan"      TRUE       100      39.23        14.83          45.94      0        0.244  "[0.1392;0.3473]" "< 2.22e-16"
+## [3,] "Peron"      FALSE      100      40.2         14.64          45.06      0.1      0.2556 "[0.154;0.354]"   "< 2.22e-16"
+## [4,] "Peron"      FALSE      100      40.24        14.65          45.1       0        0.2559 "[0.1537;0.3566]" "< 2.22e-16"
 
 
 ## * [not used] data management (original dataset)

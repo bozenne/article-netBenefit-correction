@@ -45,7 +45,7 @@ NBE <- calcNB(lambdaC = lambdaC,
               t3 = 80,
               t4 = 100)
 
-NBE
+print(NBE)
 ##         40         60         80        100      infty      total netBenefit 
 ## 0.01777268 0.01853809 0.02407939 0.02812682 0.25742445 0.34594144 0.30811713 
 

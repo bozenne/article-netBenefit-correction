@@ -66,37 +66,43 @@ BuyseTest.options(n.resampling = 1e4, ## number of bootstrap samples
 ff <- trt2~tte(dsurvyears, status=DC, threshold=2)
 df.eortc$trt2 <- relevel(df.eortc$trt2,"Short ADT")
 
-## Gehan scoring rule without correction
-BuyseGehan <- BuyseTest(ff,
-                        data = df.eortc,
-                        scoring.rule ="Gehan",
-                        seed = 10,
-                        correction.uninf = FALSE)
-
-## Gehan scoring rule with correction at the pair level
-BuyseGehan_corr <- BuyseTest(ff, data = df.eortc,
-                             scoring.rule ="Gehan",
-                             seed = 10,
-                             correction.uninf = TRUE)
-
-## Peron scoring rule without correction
-BuysePeron <- BuyseTest(ff, data = df.eortc,
-                        scoring.rule ="Peron",
-                        seed = 10,
-                        correction.uninf = FALSE)
-
-## Peron scoring rule with correction at the pair level
-BuysePeron_corr <- BuyseTest(ff, data = df.eortc,
-                             scoring.rule ="Peron",
-                             seed = 10,
-                             correction.uninf = TRUE)
-
 if(save){
+    ## Gehan scoring rule without correction
+    BuyseGehan <- BuyseTest(ff,
+                            data = df.eortc,
+                            scoring.rule ="Gehan",
+                            seed = 10,
+                            correction.uninf = FALSE)
+
+    ## Gehan scoring rule with correction at the pair level
+    BuyseGehan_corr <- BuyseTest(ff, data = df.eortc,
+                                 scoring.rule ="Gehan",
+                                 seed = 10,
+                                 correction.uninf = TRUE)
+
+    ## Peron scoring rule without correction
+    BuysePeron <- BuyseTest(ff, data = df.eortc,
+                            scoring.rule ="Peron",
+                            seed = 10,
+                            correction.uninf = FALSE)
+
+    ## Peron scoring rule with correction at the pair level
+    BuysePeron_corr <- BuyseTest(ff, data = df.eortc,
+                                 scoring.rule ="Peron",
+                                 seed = 10,
+                                 correction.uninf = TRUE)
+
     saveRDS(list(BuyseGehan = BuyseGehan,
                  BuyseGehan_corr = BuyseGehan_corr ,
                  BuysePeron = BuysePeron,
                  BuysePeron_corr = BuysePeron_corr),
             file = "Results/BT-EORTC.rds")
+}else{
+    BT.EORTC <- readRDS("Results/BT-EORTC.rds")
+    BuyseGehan <- BT.EORTC$BuyseGehan
+    BuyseGehan_corr <- BT.EORTC$BuyseGehan_corr
+    BuysePeron <- BT.EORTC$BuysePeron
+    BuysePeron_corr <- BT.EORTC$BuysePeron_corr
 }
 
 ## ** Results
@@ -105,17 +111,17 @@ M <- rbind(c("scoring.rule" = "Gehan", correction = FALSE, summary(BuyseGehan, p
            c("scoring.rule" = "Peron", correction = FALSE, summary(BuysePeron, print = FALSE)$table.print[,3:10]),
            c("scoring.rule" = "Peron", correction = FALSE, summary(BuysePeron_corr, print = FALSE)$table.print[,3:10]))
 print(M, quote = FALSE)
-##     scoring.rule correction total(%) favorable(%) unfavorable(%) neutral(%) uninf(%) Delta   CI [2.5% ; 97.5%]   p.value 
-## [1,] "Gehan"      FALSE      100      9.51         12.77          2.89       74.83    -0.0326 "[-0.0699;0.0038]"  "0.0848"
-## [2,] "Gehan"      TRUE       100      37.79        50.74          11.47      0        -0.1295 "[-0.2748;0.0155]"  "0.0848"
-## [3,] "Peron"      FALSE      100      16.85        25.91          4.83       52.4     -0.0906 "[-0.1536;-0.0265]" "0.0056"
-## [4,] "Peron"      FALSE      100      35.41        54.44          10.15      0        -0.1903 "[-0.3168;-0.0563]" "0.0056"
+##      scoring.rule correction total(%) favorable(%) unfavorable(%) neutral(%) uninf(%) Delta  CI [2.5% ; 97.5%]  p.value 
+## [1,] "Gehan"      FALSE      100      12.77        9.51           2.89       74.83    0.0326 "[-0.0038;0.0699]" "0.0812"
+## [2,] "Gehan"      TRUE       100      50.74        37.79          11.47      0        0.1295 "[-0.0128;0.2743]" "0.0723"
+## [3,] "Peron"      FALSE      100      25.91        16.85          4.83       52.4     0.0906 "[0.0271;0.1569]"  "0.0054"
+## [4,] "Peron"      FALSE      100      54.44        35.41          10.15      0        0.1903 "[0.0556;0.3187]"  "0.0048"
 
 
 ## * [not used] data management (original dataset)
 if(FALSE){
     ## ** load
-    df.eortc = read.csv(file.path("source","data_EORTC-22961.csv"),sep=";" ,header = TRUE)
+    df.eortc = read.csv(file.path("source","data_EORTC-22961.csv"),sep=";" ,header =x TRUE)
 
     ## ** process
     df.eortc$dsurvmonths <- df.eortc$dsur/30.4

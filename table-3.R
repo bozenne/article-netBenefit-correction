@@ -3,7 +3,6 @@
 ## * Load R packages
 library(data.table)
 options(width = 100)
-
 ## * Load results
 dtS.scenario1 <- readRDS("Results/dtS-scenario1.rds")
 dtS.scenario1 <- dtS.scenario1[n == 200 & HR == 0.5 & scoring.rule != "GS" & hazard.censoring %in% c(1.0e-07, 1.7e-03, 7.0e-03, 1.7e-02, 6.8e-02)]
