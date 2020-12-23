@@ -1,4 +1,4 @@
-## This file reproduces figure A of the supplementary material
+## This file generates figure A of the supplementary materials
 save <- FALSE
 
 ## * Load R packages
@@ -107,6 +107,7 @@ gg.figureAe <- gg.figureAe + theme(plot.title = element_text(size = 10, margin=m
 gg.figureA <- ggarrange(gg.figureAa, gg.figureAb, gg.figureAc, gg.figureAd, gg.figureAe,
                         common.legend = TRUE, legend = "bottom", ncol = 1)
 
+print(gg.figureA)
 if(save){
     ggsave(gg.figureA, filename = file.path("figures/figureA.pdf"), width = 10, height = 20)
     ggsave(gg.figureA, filename = file.path("figures/figureA.png"), width = 10, height = 20)

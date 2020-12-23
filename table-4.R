@@ -1,3 +1,5 @@
+## This file generates table 4 of the article
+
 ## * Load R packages
 library(BuyseTest)
 if(packageVersion("BuyseTest") < "2.2.0"){
@@ -22,7 +24,7 @@ table4[,"CIinf.Delta"] <- paste0(table4[,"CIinf.Delta"]," to ",table4[,"CIsup.De
 table4[,"CIsup.Delta"] <- NULL
 rownames(table4) <-  c("Gehan's scoring rule","Gehan's scoring rule with correction","Peron's scoring rule", "Peron's scoring rule with correction")
 colnames(table4) <- c("Wins","Losses","Neutral","Uninformative","Estimate","95%CI","P")
-table4
+print(table4)
 ##                                      Wins Losses Neutral Uninformative Estimate        95%CI      P
 ## Gehan's scoring rule                 28.2   10.7    33.0          28.2     17.5  9.9 to 25.2  1e-04
 ## Gehan's scoring rule with correction 39.2   14.8    45.9           0.0     24.4 13.9 to 34.7 <2e-16

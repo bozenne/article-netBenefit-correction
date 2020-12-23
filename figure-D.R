@@ -1,3 +1,4 @@
+## This file generates figure D of the supplementary materials
 save <- FALSE
 
 ## * load R packages
@@ -41,7 +42,8 @@ figureD <- figureD + geom_line(size = 1.5)
 figureD <- figureD + facet_wrap(~type)
 figureD <- figureD + xlab("Time (months)") + ylab("Hazard ratio") + coord_cartesian(ylim = c(0,1))
 figureD <- figureD + theme(text = element_text(size=20))
-                                             
+
+print(figureD)
 if(save){
     ggsave(figureD, filename = file.path("figures/figureD.png"), width = 10)
     ggsave(figureD, filename = file.path("figures/figureD.pdf"), width = 10)

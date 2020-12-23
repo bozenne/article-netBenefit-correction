@@ -74,6 +74,8 @@ gg.figure1e <- gg.figure1e  + ggtitle("Scenario 5",
 gg.figure1 <- ggarrange(gg.figure1a, gg.figure1b, gg.figure1c, gg.figure1d, gg.figure1e,
                         common.legend = TRUE, legend = "bottom")
 
+print(gg.figure1)
+
 if(save){
     ggsave(gg.figure1, filename = file.path("figures/figure1.png"), width = 10)
     ggsave(gg.figure1, filename = file.path("figures/figure1.pdf"), width = 10)

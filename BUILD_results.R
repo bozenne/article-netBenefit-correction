@@ -37,9 +37,6 @@ loadRes <- function(path, tempo.file = FALSE, type = NULL,
 
     ls.out <- do.call(myApply, args = list(X = 1:n.file, FUN = function(iFile){
         iRead <- readRDS(file = file.path(path,file.read[iFile]))
-        ## if("grip" %in% names(iRead)){
-            ## names(iRead)[names(iRead)=="grip"] <- "grid"
-        ## }
         iOut <- cbind(data.table::as.data.table(iRead),
                       file = file.read[iFile])
         if(!is.null(export.attribute)){
@@ -52,13 +49,13 @@ loadRes <- function(path, tempo.file = FALSE, type = NULL,
         attr(out,export.attribute) <- attr(ls.out[[1]],export.attribute)
     }
     return(out)
-}
+    }
 
 
 
 ## * Scenario 1
 ## ** load
-dt.scenario1 <- loadRes(path.scenario1, export.attribute = "grid", tempo.file = TRUE)
+dt.scenario1 <- loadRes(path.scenario1, export.attribute = "grid", type = "repetition")
 dt.scenario1 <- data.table(attr(dt.scenario1,"grid")[dt.scenario1$grid,],dt.scenario1)
 
 dt.scenario1.power <- loadRes(path.scenario1, export.attribute = "grid", type = "inference")
@@ -85,9 +82,10 @@ dtS.scenario1.power <- dt.scenario1.power[,.(rep= .N,
 saveRDS(dtS.scenario1, file = "Results/dtS-scenario1.rds")
 saveRDS(dtS.scenario1.power, file = "Results/dtS-scenario1-power.rds")
 
+
 ## * Scenario 2
 ## ** load
-dt.scenario2 <- loadRes(path.scenario2, export.attribute = "grid", tempo.file = TRUE)
+dt.scenario2 <- loadRes(path.scenario2, export.attribute = "grid", type = "repetition")
 dt.scenario2 <- data.table(attr(dt.scenario2,"grid")[dt.scenario2$grid,],dt.scenario2)
 
 dt.scenario2.power <- loadRes(path.scenario2, export.attribute = "grid", type = "inference")
@@ -117,7 +115,7 @@ saveRDS(dtS.scenario2.power, file = "Results/dtS-scenario2-power.rds")
 
 ## * Scenario 3
 ## ** load
-dt.scenario3 <- loadRes(path.scenario3, export.attribute = "grid", tempo.file = TRUE)
+dt.scenario3 <- loadRes(path.scenario3, export.attribute = "grid", type = "repetition")
 dt.scenario3 <- data.table(attr(dt.scenario3,"grid")[dt.scenario3$grid,],dt.scenario3)
 
 dt.scenario3.power <- loadRes(path.scenario3, export.attribute = "grid", type = "inference")
@@ -148,7 +146,7 @@ saveRDS(dtS.scenario3.power, file = "Results/dtS-scenario3-power.rds")
 
 ## * Scenario 4
 ## ** load
-dt.scenario4 <- loadRes(path.scenario4, export.attribute = "grid", type = "inference")
+dt.scenario4 <- loadRes(path.scenario4, export.attribute = "grid", type = "repetition")
 dt.scenario4 <- data.table(attr(dt.scenario4,"grid")[dt.scenario4$grid,],dt.scenario4)
 
 dt.scenario4.power <- loadRes(path.scenario4, export.attribute = "grid", type = "inference")
@@ -179,7 +177,7 @@ saveRDS(dtS.scenario4.power, file = "Results/dtS-scenario4-power.rds")
 
 ## * Scenario 5
 ## ** load
-dt.scenario5 <- loadRes(path.scenario5, export.attribute = "grid", tempo.file = TRUE)
+dt.scenario5 <- loadRes(path.scenario5, export.attribute = "grid", type = "repetition")
 dt.scenario5 <- data.table(attr(dt.scenario5,"grid")[dt.scenario5$grid,],dt.scenario5)
 
 ## ** summarize
@@ -196,7 +194,7 @@ saveRDS(dtS.scenario5, file = "Results/dtS-scenario5.rds")
 
 ## * Scenario 6
 ## ** load
-dt.scenario6 <- loadRes(path.scenario6, export.attribute = "grid", tempo.file = TRUE)
+dt.scenario6 <- loadRes(path.scenario6, export.attribute = "grid", type = "repetition")
 dt.scenario6 <- data.table(attr(dt.scenario6,"grid")[dt.scenario6$grid,],dt.scenario6)
 
 ## ** summarize
@@ -213,7 +211,7 @@ saveRDS(dtS.scenario6, file = "Results/dtS-scenario6.rds")
 
 ## * Scenario 7
 ## ** load
-dt.scenario7 <- loadRes(path.scenario7, export.attribute = "grid", tempo.file = TRUE)
+dt.scenario7 <- loadRes(path.scenario7, export.attribute = "grid", type = "repetition")
 dt.scenario7 <- data.table(attr(dt.scenario7,"grid")[dt.scenario7$grid,],dt.scenario7)
 
 ## ** summarize

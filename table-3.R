@@ -2,6 +2,7 @@
 
 ## * Load R packages
 library(data.table)
+options(width = 100)
 
 ## * Load results
 dtS.scenario1 <- readRDS("Results/dtS-scenario1.rds")

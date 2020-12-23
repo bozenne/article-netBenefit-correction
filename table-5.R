@@ -1,3 +1,5 @@
+## This file generates table 5 of the article
+
 ## * Load R packages
 library(BuyseTest)
 if(packageVersion("BuyseTest") < "2.2.0"){

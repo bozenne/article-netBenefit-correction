@@ -1,6 +1,6 @@
-## This file reproduces figure B in the appendix
-
+## This file generates figure B of the supplementary materials
 save <- FALSE
+
 ## * Load R packages
 library(survival)
 

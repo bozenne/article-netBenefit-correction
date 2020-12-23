@@ -1,4 +1,5 @@
-## This file generates table 3 of the article
+## This file generates figure E of the supplementary materials
+save <- FALSE
 
 ## * Load R packages
 library(data.table)
@@ -69,5 +70,7 @@ figureE <- figureE + guides(color=guide_legend(nrow=2,byrow=TRUE),linetype=guide
 figureE <- figureE + xlab("Proportion of censored observations")
 figureE <- figureE + scale_x_continuous(breaks=seq(0,1,0.2))
 
-ggsave(figureE, filename = file.path("figures/figureE.png"), width = 10)
-ggsave(figureE, filename = file.path("figures/figureE.pdf"), width = 10)
+if(save){
+    ggsave(figureE, filename = file.path("figures/figureE.png"), width = 10)
+    ggsave(figureE, filename = file.path("figures/figureE.pdf"), width = 10)
+}

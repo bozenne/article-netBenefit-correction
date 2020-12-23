@@ -1,5 +1,4 @@
-## This file reproduces figure C in the appendix
-
+## This file generates figure C of the supplementary materials
 save <- FALSE
 
 ## * Load R packages
