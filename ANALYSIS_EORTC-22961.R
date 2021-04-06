@@ -55,6 +55,7 @@ summary(coxph(Surv(dsurvyears, DC)~trt2, data = df.eortc))
 ## non-parametric bootstrap: slow but accurate version used in the article
 BuyseTest.options(n.resampling = 1e4, ## number of bootstrap samples 
                   method.inference = "bootstrap",
+                  fitter.model.tte = "prodlim",
                   cpus = 1) ## number of CPU's used for parallel computing)
 ## fast approximation (wrong p-values/CI in presence of the correction)
 ## BuyseTest.options(method.inference = "u-statistic")
@@ -121,7 +122,7 @@ print(M, quote = FALSE)
 ## * [not used] data management (original dataset)
 if(FALSE){
     ## ** load
-    df.eortc = read.csv(file.path("source","data_EORTC-22961.csv"),sep=";" ,header =x TRUE)
+    df.eortc = read.csv(file.path("source","data_EORTC-22961.csv"),sep=";" ,header = TRUE)
 
     ## ** process
     df.eortc$dsurvmonths <- df.eortc$dsur/30.4

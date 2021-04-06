@@ -48,6 +48,7 @@ summary(coxph(Surv(OS, etat)~bras, data = df.prodige))
 ## ** method used to estimate confidence intervals/p-values
 ## non-parametric bootstrap: slow but accurate version used in the article
 BuyseTest.options(n.resampling = 1e4, ## number of bootstrap samples 
+                  fitter.model.tte = "prodlim",
                   method.inference = "bootstrap",
                   cpus = 1) ## number of CPU's used for parallel computing)
 ## fast approximation (wrong p-values/CI in presence of the correction)

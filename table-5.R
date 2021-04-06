@@ -22,7 +22,7 @@ table5[,"CIinf.Delta"] <- paste0(table5[,"CIinf.Delta"]," to ",table5[,"CIsup.De
 table5[,"CIsup.Delta"] <- NULL
 rownames(table5) <-  c("Gehan's scoring rule","Gehan's scoring rule with correction","Peron's scoring rule", "Peron's scoring rule with correction")
 colnames(table5) <- c("Wins","Losses","Neutral","Uninformative","Estimate","95%CI","P")
-table5
+print(table5)
 ##                                      Wins Losses Neutral Uninformative Estimate        95%CI      P
 ## Gehan's scoring rule                 12.8    9.5     2.9          74.8      3.3    -0.4 to 7 0.0812
 ## Gehan's scoring rule with correction 50.7   37.8    11.5           0.0     13.0 -1.3 to 27.4 0.0723
