@@ -1,5 +1,5 @@
 Article: On the estimation of average treatment effects with
-right-censored time to event outcome and competing risks
+right-censored time to event outcome and competing risks (link: https://doi.org/10.1002/bimj.201800298)
 
 Authors: Julien Péron, Maryam Idlhaj, Delphine Maucort-Boulch, Joris Giai, Pascal Roy, Laurence Collette, Marc Buyse, Brice Ozenne
 
